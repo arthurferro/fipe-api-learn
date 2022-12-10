@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FIPE</title>
+
+    <link
+      rel="stylesheet"
+      href="./assets/lib/bootstrap/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div id="app" class="container">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-12 col-md-6 col-lg-4 offset-md-3 offset-lg-4 text-center"
+          >
+            <img src="./assets/img/logo.png" alt="Logo" />
+            <hr />
+            <img
+              v-if="carregandoMarcas"
+              src="./assets/img/loading.gif"
+              width="30"
+            />
+            <div v-if="marcas && !carregandoMarcas">
+              <span class="title"> Selecione a marca </span>
+              <select
+                class="form-control"
+                v-model="marcaSelecionada"
+                @change="getModelos($event.target.value)"
+              >
+                <option disabled value="">Selecione</option>
+                <option v-for="marca in marcas" :value="marca.codigo">
+                  {{ marca.nome.toUpperCase() }}
+                </option>
+              </select>
+            </div>
+            <br />
+            <img
+              v-if="carregandoModelos"
+              src="./assets/img/loading.gif"
+              width="30"
+            />
+            <div v-if="modelos.length && !carregandoModelos">
+              <span class="title">Selecione o modelo</span>
+              <select
+                class="form-control"
+                v-model="modeloSelecionado"
+                @change="getAnos(marcaSelecionada, $event.target.value)"
+              >
+                <option disabled :value="">Selecione</option>
+                <option v-for="modelo in modelos" :value="modelo.codigo">
+                  {{ modelo.nome.toUpperCase() }}
+                </option>
+              </select>
+            </div>
+            <br />
+            <img
+              v-if="carregandoAnos"
+              src="./assets/img/loading.gif"
+              width="30"
+            />
+            <div v-if="anos.length && !carregandoAnos">
+              <span class="title"> Selecione o ano </span>
+              <select
+                class="form-control"
+                v-model="anoSelecionado"
+                @change="getValor(marcaSelecionada, modeloSelecionado, $event.target.value)"
+              >
+                <option disabled value="">Selecione</option>
+                <option v-for="ano in anos" :value="ano.codigo">
+                  {{ ano.nome.toUpperCase() }}
+                </option>
+              </select>
+            </div>
+            <br />
+            <img
+              v-if="carregandoValor"
+              src="./assets/img/loading.gif"
+              width="30"
+            />
+            <div v-if="valor && !carregandoValor">
+              <h3 class="text-center">Dados do veículo</h3>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <span class="title">Código FIPE</span>
+                </span>
+                <div class="form-control input-value">
+                  {{ valor.CodigoFipe }}
+                </div>
+              </div>
+              <br>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <span class="title">Combustível</span>
+                </span>
+                <div class="form-control input-value">
+                  {{ valor.Combustivel }}
+                </div>
+              </div>
+              <br>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <span class="title">Valor</span>
+                </span>
+                <div class="form-control input-value">{{ valor.Valor }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/lib/vuejs/vue.js"></script>
+    <script src="./assets/lib/axios/axios.min.js"></script>
+    <script src="./fipe.js"></script>
+  </body>
+</html>
