@@ -1,5 +1,6 @@
 const { createApp } = Vue;
 var apiEndpoint = 'https://parallelum.com.br/fipe/api/v1/carros/marcas';
+var apiImagesEndpoint = 'http://localhost:3000';
 
 const app = createApp({
   mounted() {
@@ -20,6 +21,7 @@ const app = createApp({
         (this.modelos = []),
         (this.anos = []),
         (this.valor = null);
+      this.images = [];
       axios({
         method: 'get',
         url: apiEndpoint,
@@ -38,6 +40,7 @@ const app = createApp({
         (this.anoSelecionado = ''),
         (this.anos = []),
         (this.valor = null);
+      this.images = [];
       axios({
         method: 'get',
         url: apiEndpoint + `/${codMarca}/modelos`,
@@ -53,6 +56,7 @@ const app = createApp({
       (this.carregandoAnos = true),
         (this.carregandoValor = false),
         (this.valor = null);
+      this.images = [];
       axios({
         method: 'get',
         url: apiEndpoint + `/${codMarca}/modelos/${codModelo}/anos`,
@@ -66,6 +70,7 @@ const app = createApp({
     },
     getValor(codMarca, codModelo, codAno) {
       this.carregandoValor = true;
+      this.images = [];
       axios({
         method: 'get',
         url: apiEndpoint + `/${codMarca}/modelos/${codModelo}/anos/${codAno}`,
@@ -74,9 +79,18 @@ const app = createApp({
         if (response.data !== null) {
           this.valor = response.data;
           console.log(this.valor);
+          this.getImages(
+            `${this.valor.Marca} ${this.valor.Modelo} ${this.valor.AnoModelo}`
+          );
           this.carregandoValor = false;
         }
       });
+    },
+    async getImages(modelo) {
+      this.carregandoImagens = true;
+      var response = await axios.get(`${apiImagesEndpoint}?modelo=${modelo}`);
+      this.images = response.data.results;
+      this.carregandoImagens = false;
     },
   },
   data() {
@@ -86,12 +100,14 @@ const app = createApp({
       carregandoModelos: false,
       carregandoAnos: false,
       carregandoValor: false,
+      carregandoImagens: false,
       marcaSelecionada: '',
       modeloSelecionado: '',
       anoSelecionado: '',
       marcas: [],
       modelos: [],
       anos: [],
+      images: [],
       valor: null,
       // DADOS QUE SERÃO UTILIZADOS NA PÁGINA
     };
