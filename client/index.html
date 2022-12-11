@@ -21,12 +21,24 @@
           >
             <img src="./assets/img/logo.png" alt="Logo" />
             <hr />
+            <span class="title"> Tipo de veículo </span>
+            <select
+              class="form-control"
+              v-model="tipoVeiculoSelecionado"
+              @change="selecionarTipoVeiculo($event.target.value)"
+            >
+              <option disabled value="">Selecione</option>
+              <option v-for="tipo in tipoVeiculos" :value="tipo.codigo">
+                {{ tipo.descricao }}
+              </option>
+            </select>
+            <br />
             <img
               v-if="carregandoMarcas"
               src="./assets/img/loading.gif"
               width="30"
             />
-            <div v-if="marcas && !carregandoMarcas">
+            <div v-if="marcas.length && !carregandoMarcas">
               <span class="title"> Selecione a marca </span>
               <select
                 class="form-control"
@@ -87,13 +99,22 @@
               <h3 class="text-center">Dados do veículo</h3>
               <div class="input-group">
                 <span class="input-group-text">
+                  <span class="title">Veículo</span>
+                </span>
+                <div class="form-control input-value">
+                  {{ valor.Marca }} {{ valor.Modelo }} {{ valor.AnoModelo }}
+                </div>
+              </div>
+              <br>
+              <div class="input-group">
+                <span class="input-group-text">
                   <span class="title">Código FIPE</span>
                 </span>
                 <div class="form-control input-value">
                   {{ valor.CodigoFipe }}
                 </div>
               </div>
-              <br>
+              <br />
               <div class="input-group">
                 <span class="input-group-text">
                   <span class="title">Combustível</span>
@@ -102,7 +123,7 @@
                   {{ valor.Combustivel }}
                 </div>
               </div>
-              <br>
+              <br />
               <div class="input-group">
                 <span class="input-group-text">
                   <span class="title">Valor</span>
@@ -110,7 +131,23 @@
                 <div class="form-control input-value">{{ valor.Valor }}</div>
               </div>
             </div>
-            <br>
+            <br />
+            <img
+              v-if="carregandoImagens"
+              src="./assets/img/loading.gif"
+              width="30"
+            />
+            <div v-if="images.length && !carregandoImagens">
+              <h3 class="text-center">Imagens do veículo</h3>
+              <div class="row">
+                <div v-for="image in images" class="col-12 col-md-6 col-lg-4">
+                  <a :href="image.url" target="_blank">
+                    <img :src="image.url" class="img-fluid" />
+                  </a>
+                </div>
+              </div>
+            </div>
+            <br />
             Made with ❤️ by Ale, Thur & Vine
           </div>
         </div>
